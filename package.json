@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "Job Tracking Backend",
   "main": "app.js",
+  "type": "module",
   "scripts": {
-    "start": "nodmeon app.js"
+    "start": "nodemon app.js"
   },
   "author": "",
   "license": "ISC",
