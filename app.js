@@ -1,12 +1,14 @@
 import express from 'express';
-import routeNotFound from './middleware/not-found.js';
+import errorHandler from './middleware/error-handler.js';
+import notFoundHandler from './middleware/not-found.js';
 const app = express();
 
 app.get('/', (req, res) => {
     res.send(`Hello Vocation Village!`);
 });
 
-app.use(routeNotFound);
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 const port = process.env.PORT || 5000;
 
