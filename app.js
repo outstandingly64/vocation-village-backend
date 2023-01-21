@@ -7,6 +7,7 @@ import connectToDB from './database/connect.js';
 
 //routers imports
 import authRoutes from './routes/auth-routes.js';
+import jobsRoutes from './routes/jobs-routes.js';
 
 //middleware imports
 import errorHandler from './middleware/error-handler.js';
@@ -19,6 +20,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/jobs', jobsRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

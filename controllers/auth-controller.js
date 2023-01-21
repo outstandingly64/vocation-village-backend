@@ -1,12 +1,14 @@
-const signUpUser = (req, res) => {
+// these will all perform asynchronous operations
+
+const signUpUser = async (req, res) => {
     res.send('user sign up');
 }
 
-const logInUser = (req, res) => {
+const logInUser = async (req, res) => {
     res.send('user log in');
 }
 
-const updateUser = (req, res) => {
+const updateUser = async (req, res) => {
     res.send('user update');
 }
 
