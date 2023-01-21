@@ -12,25 +12,35 @@ const signUpUser = async (req, res, next) => {
     return next(error);
   }
 
-  const { name, email, password} = req.body;
+  const { name, email, password } = req.body;
 
   let existingUser;
   try {
-    existingUser = await User.findOne({email: email});
+    existingUser = await User.findOne({ email: email });
   } catch (err) {
     const error = new HttpError("Something went wrong, please try again.", 500);
-    return(error);
+    return error;
   }
 
-  if(existingUser) return next(new HttpError("This email is already associated with another user.", 422));
+  if (existingUser)
+    return next(
+      new HttpError("This email is already associated with another user.", 422)
+    );
+
+  const createdUser = new User({
+    name,
+    email,
+    password,
+  });
 
   try {
-    const user = await User.create(req.body);
-    res.status(201).json({ user });
+    await createdUser.save();
   } catch (err) {
-    const error = new HttpError(err.message, 500);
+    const error = new HttpError("Sign up request failed to process.", 500);
     return next(error);
   }
+
+  res.status(201).json({ createdUser });
 };
 
 const logInUser = async (req, res) => {

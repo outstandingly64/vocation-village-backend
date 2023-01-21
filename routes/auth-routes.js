@@ -5,7 +5,7 @@ import { check } from 'express-validator';
 import { signUpUser, logInUser, updateUser } from '../controllers/auth-controller.js';
 
 router.route('/signup').post([
-    check('name').not().isEmpty(),
+    check('name').not().isEmpty().isLength({ min: 3, max: 20}),
     check('email').normalizeEmail().isEmail(),
     check('password').isLength({ min: 6})
 ], signUpUser);
