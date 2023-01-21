@@ -1,5 +1,5 @@
 import express from 'express'
-const router = express.router();
+const router = express.Router();
 // auth controller methods for auth routes
 import { signUpUser, logInUser, updateUser } from '../controllers/auth-controller.js';
 
