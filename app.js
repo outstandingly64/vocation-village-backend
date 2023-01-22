@@ -3,6 +3,7 @@ import cors from 'cors';
 const app = express();
 import dotenv from 'dotenv';
 dotenv.config();
+import morgan from 'morgan';
 
 import connectToDB from './database/connect.js';
 
@@ -14,7 +15,9 @@ import jobsRoutes from './routes/jobs-routes.js';
 import errorHandler from './middleware/error-handler.js';
 import notFoundHandler from './middleware/not-found.js';
 
-app.use(cors());
+if(process.env.NODE_ENV !== 'production'){
+    app.use(morgan('dev'))
+}
 app.use(express.json());
 
 app.get('/', (req, res) => {
