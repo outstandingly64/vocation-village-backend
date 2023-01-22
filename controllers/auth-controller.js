@@ -1,4 +1,6 @@
 import User from "../models/User.js";
+import bcrypt from "bcrypt";
+import jwt from 'jsonwebtoken';
 import HttpError from "../models/HttpError.js";
 
 import { validationResult } from "express-validator";
@@ -27,10 +29,21 @@ const signUpUser = async (req, res, next) => {
       new HttpError("This email is already associated with another user.", 422)
     );
 
+  let hashedPassword;
+  try {
+    hashedPassword = await bcrypt.hash(password, 12);
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrong while processing data, please try again",
+      500
+    );
+    return next(error);
+  }
+
   const createdUser = new User({
     name,
     email,
-    password,
+    password: hashedPassword,
   });
 
   try {
@@ -40,7 +53,19 @@ const signUpUser = async (req, res, next) => {
     return next(error);
   }
 
-  res.status(201).json({ createdUser });
+  let token;
+  try {
+    token = jwt.sign(
+      { userId: createdUser.id, email: createdUser.email },
+      process.env.JWT_TOKEN,
+      { expiresIn: "1hr" }
+    );
+  } catch (err) {
+    const error = new HttpError("An error has occurred contacting server, please try again", 500);
+    return next(error);
+  }
+
+  res.status(201).json({ userId: createdUser.id, email: createdUser.email, token});
 };
 
 const logInUser = async (req, res) => {
