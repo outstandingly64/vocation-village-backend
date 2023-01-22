@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 const app = express();
 import dotenv from 'dotenv';
 dotenv.config();
@@ -13,6 +14,7 @@ import jobsRoutes from './routes/jobs-routes.js';
 import errorHandler from './middleware/error-handler.js';
 import notFoundHandler from './middleware/not-found.js';
 
+app.use(cors());
 app.use(express.json());
 
 app.get('/', (req, res) => {
