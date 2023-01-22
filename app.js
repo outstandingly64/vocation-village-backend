@@ -18,7 +18,11 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/', (req, res) => {
-    res.send(`Hello Vocation Village!`);
+    res.json({msg: "Hello Vocation Village!"});
+});
+
+app.get('/api', (req, res) => {
+    res.json({msg: "Hello Vocation Village!"});
 });
 
 app.use('/api/auth', authRoutes);

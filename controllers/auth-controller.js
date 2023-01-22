@@ -1,6 +1,6 @@
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 import HttpError from "../models/HttpError.js";
 
 import { validationResult } from "express-validator";
@@ -61,11 +61,25 @@ const signUpUser = async (req, res, next) => {
       { expiresIn: "1hr" }
     );
   } catch (err) {
-    const error = new HttpError("An error has occurred contacting server, please try again", 500);
+    const error = new HttpError(
+      "An error has occurred contacting server, please try again",
+      500
+    );
     return next(error);
   }
 
-  res.status(201).json({ userId: createdUser.id, email: createdUser.email, token});
+  res
+    .status(201)
+    .json({
+      user: {
+        email,
+        name,
+        lastName: createdUser.lastName,
+        location: createdUser.location,
+      },
+      token,
+      location: createdUser.location,
+    });
 };
 
 const logInUser = async (req, res) => {
