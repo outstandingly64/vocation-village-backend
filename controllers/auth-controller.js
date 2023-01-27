@@ -133,6 +133,7 @@ const logInUser = async (req, res, next) => {
 };
 
 const updateUser = async (req, res) => {
+  console.log(req.user);
   res.send("user update");
 };
 
