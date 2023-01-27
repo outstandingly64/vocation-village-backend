@@ -14,6 +14,8 @@ import jobsRoutes from './routes/jobs-routes.js';
 //middleware imports
 import errorHandler from './middleware/error-handler.js';
 import notFoundHandler from './middleware/not-found.js';
+import checkAuth from './middleware/check-auth.js';
+
 
 if(process.env.NODE_ENV !== 'production'){
     app.use(morgan('dev'))
@@ -29,7 +31,7 @@ app.get('/api', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
-app.use('/api/jobs', jobsRoutes);
+app.use('/api/jobs', checkAuth, jobsRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
