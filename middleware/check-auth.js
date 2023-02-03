@@ -13,7 +13,7 @@ const auth = async (req, res, next) => {
     req.user = { userId: payload.userId };
     next();
   } catch (error) {
-    return next(new HttpError("Authentication failed.", 401));
+    return next(new HttpError("Unqiue authentication failed...", 401));
   }
 };
 

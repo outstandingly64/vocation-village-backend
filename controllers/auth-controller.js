@@ -117,7 +117,9 @@ const logInUser = async (req, res, next) => {
       { expiresIn: "1hr" }
     );
   } catch (err) {
-    return next(new HttpError("An unknown error has occurred, please try again", 500));
+    return next(
+      new HttpError("An unknown error has occurred, please try again", 500)
+    );
   }
 
   res.status(201).json({
@@ -133,8 +135,59 @@ const logInUser = async (req, res, next) => {
 };
 
 const updateUser = async (req, res) => {
-  console.log(req.user);
-  res.send("user update");
+  const { email, name, lastName, location } = req.body;
+  if (!email || !name || !lastName || !location) {
+    return next(new HttpError("Please provide all values", 403));
+  }
+
+  let user;
+  try {
+    user = await User.findOne({ _id: req.user.userId });
+  } catch (error) {
+    return next(
+      new HttpError("An unknown authentication error has occurred.", 500)
+    );
+  }
+
+  user.email = email;
+  user.name = name;
+  user.location = location;
+  user.lastName = lastName;
+
+  try {
+    await user.save();
+  } catch (error) {
+    return next(
+      new HttpError("An error has occured while updating user.", 500)
+    );
+  }
+
+  let token;
+  try {
+    token = jwt.sign(
+      { userId: user.id, email: user.email },
+      process.env.JWT_TOKEN,
+      { expiresIn: "1hr" }
+    );
+  } catch (err) {
+    return next(
+      new HttpError(
+        "An unknown error has occurred while generating token.",
+        500
+      )
+    );
+  }
+
+  res.status(201).json({
+    user: {
+      email: user.email,
+      name: user.name,
+      lastName: user.lastName,
+      location: user.location,
+    },
+    token,
+    location: user.location,
+  });
 };
 
 export { signUpUser, logInUser, updateUser };
