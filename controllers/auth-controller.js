@@ -134,7 +134,7 @@ const logInUser = async (req, res, next) => {
   });
 };
 
-const updateUser = async (req, res) => {
+const updateUser = async (req, res, next) => {
   const { email, name, lastName, location } = req.body;
   if (!email || !name || !lastName || !location) {
     return next(new HttpError("Please provide all values", 403));
